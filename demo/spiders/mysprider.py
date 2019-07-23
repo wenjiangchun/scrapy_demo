@@ -1,5 +1,6 @@
 import scrapy
 
+from demo.items import DemoItem
 
 class MySpider(scrapy.Spider):
     name = "demo"
@@ -15,6 +16,10 @@ class MySpider(scrapy.Spider):
     def parse(self, response):
         page = response.url.split("/")[-2]
         filename = 'quotes-%s.html' % page
-        with open(filename, 'wb') as f:
-            f.write(response.body)
-        self.log('Saved file %s' % filename)
+        item =  DemoItem()
+        item["name"] = filename
+        item["title"] = response.body
+       # with open(filename, 'wb') as f:
+        #    f.write(response.body)
+        self.log('Saved item %s' % filename)
+        yield item
